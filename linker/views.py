@@ -64,7 +64,7 @@ def redirect_view(request, short_link):
     :return: Redirect to model's full link
     """
     link = Link.objects.get(shortened_link__contains=short_link)  # Find link object to get full URL to redirect
-    link.redirects += 1  # Increment redirects counter
+    link.increment_redirects() # Increment redirects counter
     link.save(force_update=True)  # Save changes
     link = link.full_link  # Get Link object's full link
     return HttpResponseRedirect(str(link))

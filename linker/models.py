@@ -19,7 +19,7 @@ class Link(models.Model):
             This method generates short link for full link saved in model
             :return: Link(Model)
         """
-        self.__check_full_link()  # Normalize full link
+        self.check_full_link()  # Normalize full link
         link = self.hash_generator()  # Call method to generate short link
         link = reverse('linker:redirect_view', kwargs={'short_link': link})  # Get short link absolute path
         self.shortened_link = link  # Write short link to model
@@ -35,7 +35,7 @@ class Link(models.Model):
         """
         return reverse('linker:result', kwargs={'link_id': self.id})
 
-    def __check_full_link(self):
+    def check_full_link(self):
         """Adds 'http://' to full link
 
             Due to django's redirect mechanism, it can redirect to absolute
@@ -63,3 +63,7 @@ class Link(models.Model):
             :todo: Make it more complicated than random
         """
         return ''.join(random.choice(chars) for _ in range(size))  # Get random chars from set
+
+    def increment_redirects(self):
+        self.redirects += 1
+        self.save(force_update=True)
