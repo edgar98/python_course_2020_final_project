@@ -2,7 +2,7 @@ from django.conf.urls import url
 from . import views
 
 app_name = 'linker'
-
+# URL patterns used in Linker app
 urlpatterns = [
     url(r'^$', views.MainView.as_view(), name='main'),
     url(r'^(?P<link_id>\d+)/result/$', views.result, name='result'),
