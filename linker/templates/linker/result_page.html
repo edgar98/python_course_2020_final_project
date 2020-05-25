@@ -1,0 +1,57 @@
+{% extends 'base_temlate.html' %}
+{% block page_header %}
+    <!-- Start Page Header area -->
+    <div id="mu-page-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="mu-page-header-area">
+                        <h1 class="mu-page-header-title">Yeah, it works</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Page Header area -->
+{% endblock %}
+{% block main %}
+    <section id="mu-blog">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="mu-blog-area">
+                        <!-- Title -->
+                        <div class="row">
+                            <div class="col-md">
+                                <div class="mu-blog-left">
+                                    <!-- start single item -->
+                                    <article class="mu-blog-item">
+                                        <div class="mu-blog-item-content">
+                                            <p>
+                                                Link creation done
+                                            </p>
+                                            <h1 class="mu-blog-item-title">
+                                                {% if not error %}
+                                                    Your link is: <a href='{{ link }}'>{{ link }}</a>
+                                                {% else %}
+                                                    <div>Oops!
+                                                        <div>Seems like such link haven't created yet</div>
+                                                        <div>Did you entered correct address?</div>
+
+                                                        <div>Try going to <a href="/">home page</a></div>
+                                                    </div>
+                                                {% endif %}
+                                            </h1>
+                                        </div>
+                                    </article>
+                                    <!-- End single item -->
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

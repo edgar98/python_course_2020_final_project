@@ -1,9 +1,11 @@
+from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from .forms import LinkCreationForm
 from django.views.generic.edit import FormView
 from .models import *
+from django.db.models import ObjectDoesNotExist
 
 
 """Views in Linker app"""
@@ -17,7 +19,8 @@ class MainView(FormView):
             -   A button to sent that link
             -   List of short links ordered by their redirects counts
     """
-    template_name = 'main_page.html'  # Template used to render result
+    POPULAR_LINKS_COUNT = 3
+    template_name = 'linker/main_page.html'  # Template used to render result
     form_class = LinkCreationForm  # Form to create Link object
 
     def get_context_data(self, **kwargs):
@@ -26,7 +29,8 @@ class MainView(FormView):
         This method adds list of links to template context
         """
         context = super().get_context_data(**kwargs)  # Call super method first
-        context['link_list'] = Link.objects.all().order_by('-redirects')  # Add list of links to context
+        context['link_list'] = Link.objects.all().order_by('-redirects')[:self.POPULAR_LINKS_COUNT]  # Add list of links to context
+        context['request'] = self.request
         return context
 
     def form_valid(self, form):
@@ -49,8 +53,15 @@ def result(request, link_id):
     :param link_id: ID of Link object from DB, parsed from urls.py
     :return: HttpResponse (Page with new link)
     """
-    link = request.build_absolute_uri(Link.objects.get(id=link_id).shortened_link)
-    return HttpResponse("Your link is: <a href='%s'>%s</a>" % (link, link))
+    link = None
+    error = False
+    try:
+        link = request.build_absolute_uri(Link.objects.get(id=link_id).shortened_link)
+    except ObjectDoesNotExist as e:
+        error = True
+
+    return render(request, 'linker/result_page.html', context={'link': link, 'error': error})
+    # return HttpResponse("Your link is: <a href='%s'>%s</a>" % (link, link))
 
 
 def redirect_view(request, short_link):
@@ -68,3 +79,12 @@ def redirect_view(request, short_link):
     link.save(force_update=True)  # Save changes
     link = link.full_link  # Get Link object's full link
     return HttpResponseRedirect(str(link))
+
+
+def list_view(request):
+    link_list = Link.objects.all().order_by('-redirects')
+    paginator = Paginator(link_list, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    context = {'page_obj': page_obj}
+    return render(request, 'linker/list_page.html', context=context)

@@ -1,0 +1,79 @@
+{% extends 'base_temlate.html' %}
+{% block main %}	<!-- Start main content -->
+	<main>
+		<!-- Start Blog -->
+		<section id="mu-blog">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="mu-blog-area">
+							<!-- Title -->
+							<div class="row">
+								<div class="col-md-8">
+									<div class="mu-blog-left">
+										<!-- start single item -->
+										<article class="mu-blog-item">
+
+
+											<div class="mu-blog-item-content">
+												<h1 class="mu-blog-item-title">Let's create new short link</h1>
+												<p>
+                                                <form method="post" class="mu-subscribe-form">{% csrf_token %}
+                                                    {{ form.link.errors }}
+                                                    {{ form.link }}
+                                                    <button type="submit" class="mu-send-msg-btn">Generate link</button>
+                                                </form>
+											</div>
+										</article>
+										<!-- End single item -->
+
+									</div>
+								</div>
+								<div class="col-md-4">
+									<div class="mu-blog-sidebar">
+
+										<!-- start Single Widget -->
+										<div class="mu-sidebar-widget">
+											<h2 class="mu-sidebar-widget-title">Popular links</h2>
+											<div class="mu-popular-content-widget">
+
+                                                {% if link_list %}
+                                                    {% for link in link_list %}
+                                                        <div class="media">
+												            <div class="media-body">
+                                                                <ul class="mu-blog-meta">
+                                                                    <li>Redirects: {{ link.redirects }}</li>
+                                                                </ul>
+                                                                <h3>Short link: <a href="{{ link.shortened_link }}">{{ link.shortened_link }}</a></h3>
+                                                            <h3>Full link: <a href="{{ link.shortened_link }}">{{ link.full_link }}</a></h3>
+												            </div>
+                                                        </div>
+                                                        {% endfor %}
+                                                {% else %}
+                                                    <div class="media">
+{#												  <a href="#" class="mu-popular-post-img"><img src="assets/images/blog-img-2.jpg" alt="image"></a>#}
+                                                        <div class="media-body">
+                                                            <h3><a href="#">No links to show. Some error occurred.</a></h3>
+												        </div>
+												    </div>
+                                                {% endif %}
+
+											</div>
+										</div>
+										<!-- End single widget -->
+
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- End Blog -->
+
+	</main>
+
+	<!-- End main content -->
+{% endblock %}

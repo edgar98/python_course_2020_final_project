@@ -1,0 +1,130 @@
+{% extends 'base_temlate.html' %}
+{% block page_header %}
+    <!-- Start Page Header area -->
+    <div id="mu-page-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="mu-page-header-area">
+                        <h1 class="mu-page-header-title">Top Links</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Page Header area -->
+{% endblock %}
+
+{% block breadcrumb %}
+    <!-- Start Breadcrumb -->
+    <div id="mu-breadcrumb">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <nav aria-label="breadcrumb" role="navigation">
+                        <ol class="breadcrumb mu-breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Top links</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Breadcrumb -->
+{% endblock %}
+
+{% block main %}
+    <!-- Start main content -->
+    <main>
+        <!-- Start Blog -->
+        <section id="mu-blog">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mu-blog-area">
+                            <!-- Title -->
+                            <div class="row">
+                                <div class="col-md">
+                                    <div class="mu-blog-left">
+                                        {% if page_obj %}
+                                            {% for link in page_obj %}
+                                                <!-- start single item -->
+                                                <article class="mu-blog-item">
+                                                    <div class="mu-blog-item-content">
+                                                        <ul class="mu-blog-meta">
+                                                            <li>Redirects: {{ link.redirects }}</li>
+                                                        </ul>
+                                                        <h1 class="mu-blog-item-title">Short link: <a
+                                                                href="{{ link.shortened_link }}">{{ link.shortened_link }}</a>
+                                                        </h1>
+                                                        <p>Full link: <a
+                                                                href="{{ link.shortened_link }}">{{ link.full_link }}</a>
+                                                        </p>
+                                                    </div>
+                                                </article>
+                                                <!-- End single item -->
+                                            {% endfor %}
+                                        {% else %}
+                                            <div class="media">
+                                                {#												<a href="#" class="mu-popular-post-img"><img src="assets/images/blog-img-2.jpg" alt="image"></a>#}
+                                                <div class="media-body">
+                                                    <h3><a href="#">No links to show. Some error occurred.</a></h3>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                        <!-- Start paginatin -->
+                                        <nav aria-label="Page navigation example" class="mu-blog-pagination">
+                                            <ul class="pagination">
+                                                {% if page_obj.has_previous %}
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="?page=1">First</a>
+                                                    </li>
+                                                    <li class="page-item">
+                                                        <a class="page-link"
+                                                           href="?page={{ page_obj.previous_page_number }}"
+                                                           aria-label="Previous">
+                                                            <span aria-hidden="true"
+                                                                  class="fa fa-long-arrow-left"></span>
+                                                            <span class="sr-only">Previous</span>
+                                                        </a>
+                                                    </li>
+                                                {% endif %}
+
+                                                <li class="page-item">
+                                                    <a class="page-link">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
+                                                </li>
+
+                                                {% if page_obj.has_next %}
+                                                    <li class="page-item">
+                                                        <a class="page-link"
+                                                           href="?page={{ page_obj.next_page_number }}"
+                                                           aria-label="Next">
+                                                            <span aria-hidden="true"
+                                                                  class="fa fa-long-arrow-right"></span>
+                                                            <span class="sr-only">Next</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+                                                    </li>
+                                                {% endif %}
+
+                                            </ul>
+                                        </nav>
+                                        <!-- End pagination -->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End Blog -->
+
+    </main>
+
+    <!-- End main content -->
+{% endblock %}
